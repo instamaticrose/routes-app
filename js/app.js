@@ -259,7 +259,9 @@ function flightPathLines() {
 
     for (var i = start_flight_idx; i < end_flight_idx; ++i) {
         var material = new THREE.LineBasicMaterial({
-            color: 0x9966CC,
+            // if (flights[i][4] == 0) {
+            //     color: 0x9966CC
+            // }
             vertexColors: THREE.VertexColors,
             transparent: true,
             opacity: flight_track_opacity,
