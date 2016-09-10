@@ -144,8 +144,8 @@ function generateControlPoints(radius) {
         var spline = new THREE.SplineCurve3(points);
 
         flight_path_splines.push(spline);
-        
-        var arc_length = spline.getLength();        
+
+        var arc_length = spline.getLength();
         flight_distance.push(arc_length);
 
         setFlightTimes(f);
@@ -252,20 +252,20 @@ function flightPathLines() {
     var num_control_points = 32;
 
     var geometry = new THREE.BufferGeometry();
-    var material = new THREE.LineBasicMaterial({
-        color: 0xffffff,
-        vertexColors: THREE.VertexColors,
-        transparent: true,
-        opacity: flight_track_opacity,
-        depthTest: true,
-        depthWrite: false,
-        linewidth: 0.001
-    });
+
     var line_positions = new Float32Array(flights.length * 3 * 2 * num_control_points);
     var colors = new Float32Array(flights.length * 3 * 2 * num_control_points);
 
     for (var i = start_flight_idx; i < end_flight_idx; ++i) {
-
+        var material = new THREE.LineBasicMaterial({
+            color: 0x9966CC,
+            vertexColors: THREE.VertexColors,
+            transparent: true,
+            opacity: flight_track_opacity,
+            depthTest: true,
+            depthWrite: false,
+            linewidth: 0.001
+        });
         for (var j = 0; j < num_control_points - 1; ++j) {
 
             var start_pos = flight_path_splines[i].getPoint(j / (num_control_points - 1));
@@ -311,7 +311,7 @@ function setFlightTimes(index) {
     var scaling_factor = (flight_point_speed_scaling - flight_point_speed_min_scaling) /
                             (flight_point_speed_max_scaling - flight_point_speed_min_scaling);
     var duration = (1-scaling_factor) * flight_distance[index] * 80000;
-   
+
     var start_time = Date.now() + Math.random() * 5000
     flight_point_start_time[index] = start_time;
     flight_point_end_time[index] = start_time + duration;
