@@ -126,7 +126,7 @@ function generateControlPoints(radius) {
         var start_lng = flights[f][1];
         var end_lat = flights[f][2];
         var end_lng = flights[f][3];
-        // var attribution = flights[f][4];
+        var attribution = flights[f][4];
 
         var max_height = Math.random() * 0.04;
 
