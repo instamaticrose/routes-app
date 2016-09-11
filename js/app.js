@@ -126,7 +126,6 @@ function generateControlPoints(radius) {
         var start_lng = flights[f][1];
         var end_lat = flights[f][2];
         var end_lng = flights[f][3];
-        var attribution = flights[f][4];
 
         var max_height = Math.random() * 0.04;
 
@@ -255,13 +254,13 @@ function flightPathLines() {
     var geometry = new THREE.BufferGeometry();
 
     var line_positions = new Float32Array(flights.length * 3 * 2 * num_control_points);
-    var colors = new Float32Array(flights.length * 3 * 2 * num_control_points);
+    var normalColors = new Float32Array(flights.length * 3 * 2 * num_control_points);
+    var specialColors = new Float32Array(flights.length * 3 * 2 * num_control_points);
+    var colors;
 
     for (var i = start_flight_idx; i < end_flight_idx; ++i) {
         var material = new THREE.LineBasicMaterial({
-            // if (flights[i][4] == 0) {
-            //     color: 0x9966CC
-            // }
+            color: 0x9966CC,
             vertexColors: THREE.VertexColors,
             transparent: true,
             opacity: flight_track_opacity,
@@ -281,20 +280,33 @@ function flightPathLines() {
             line_positions[(i * num_control_points + j) * 6 + 4] = end_pos.y;
             line_positions[(i * num_control_points + j) * 6 + 5] = end_pos.z;
 
-            colors[(i * num_control_points + j) * 6 + 0] = 1.0;
-            colors[(i * num_control_points + j) * 6 + 1] = 0.4;
-            colors[(i * num_control_points + j) * 6 + 2] = 1.0;
-            colors[(i * num_control_points + j) * 6 + 3] = 1.0;
-            colors[(i * num_control_points + j) * 6 + 4] = 0.4;
-            colors[(i * num_control_points + j) * 6 + 5] = 1.0;
+            specialColors[(i * num_control_points + j) * 6 + 0] = 5.0;
+            specialColors[(i * num_control_points + j) * 6 + 1] = 1.0;
+            specialColors[(i * num_control_points + j) * 6 + 2] = 0.5;
+            specialColors[(i * num_control_points + j) * 6 + 3] = 5.0;
+            specialColors[(i * num_control_points + j) * 6 + 4] = 1.0;
+            specialColors[(i * num_control_points + j) * 6 + 5] = 0.5;
+            
+            normalColors[(i * num_control_points + j) * 6 + 0] = 1.0;
+            normalColors[(i * num_control_points + j) * 6 + 1] = 0.4;
+            normalColors[(i * num_control_points + j) * 6 + 2] = 1.0;
+            normalColors[(i * num_control_points + j) * 6 + 3] = 1.0;
+            normalColors[(i * num_control_points + j) * 6 + 4] = 0.4;
+            normalColors[(i * num_control_points + j) * 6 + 5] = 1.0;
         }
+    if (flights[i][4] == 0) {
+        colors = normalColors;
+    } else {
+        colors = specialColors;
     }
 
     geometry.addAttribute('position', new THREE.BufferAttribute(line_positions, 3));
+    console.log("colors is");
+    console.log(colors);
     geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     geometry.computeBoundingSphere();
-
+}
     return new THREE.Line(geometry, material, THREE.LinePieces);
 }
 
